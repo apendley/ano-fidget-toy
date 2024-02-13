@@ -9,8 +9,8 @@ _gamma = 1.6
 _gamma_table = []
 
 for i in range(256):
-		value = math.pow(i / 255.0, _gamma) * 255.0 + 0.5
-		_gamma_table.append(int(value))
+	value = math.pow(i / 255.0, _gamma) * 255.0 + 0.5
+	_gamma_table.append(int(value))
 
 def gamma8(c):
 	global _gamma_table
@@ -21,7 +21,8 @@ def gamma8(c):
 	return (
 		_gamma_table[c[0]], 
 		_gamma_table[c[1]], 
-		_gamma_table[c[2]])
+		_gamma_table[c[2]]
+	)
 
 # ---------------------------
 # sin8
@@ -71,11 +72,7 @@ def color_blend(from_color, to_color, t):
 	if type(to_color) is int:
 		to_color = color_unpack(to_color)
 
-	if t < 0.0:
-		t = 0.0
-	elif t > 1.0:
-		t = 1.0
-
+	t = clamp(t, 0.0, 1.0)
 	t_from = 1.0 - t
 
 	return (

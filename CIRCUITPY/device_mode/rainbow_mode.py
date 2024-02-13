@@ -14,6 +14,7 @@ class Particle:
 		self.ring_light = ring_light
 		self.is_active = False
 		self.position = 0
+		self._last_position = 0
 		self.color = (0, 0, 0)
 		self.speed = 1.0
 		self.duration = 1000
@@ -21,6 +22,7 @@ class Particle:
 	def activate(self, position, color, speed, duration):
 		self.is_active = True
 		self.position = position
+		self._last_position = position
 		self.color = color
 		self.speed = speed
 		self.duration = duration
@@ -39,9 +41,25 @@ class Particle:
 			self.is_active = False
 			return
 
+		ring_light = self.ring_light
+
+		self._last_position = self.position
 		self.position += self.speed * elapsed_ms / 1000
-		p = self.ring_light.wrap_index(self.position)
-		self.ring_light[p] = self.color
+
+		# To prevent gaps in the trail in case the framerate dips, track the last pointer index.
+		index = int(self.position)		
+		last_index = int(self._last_position)
+
+		# Draw the pixel at the current pointer location
+		ring_light[ring_light.wrap_index(index)] = self.color
+
+		# Draw the pixels in between the last position and the current position
+		if index > last_index:
+			index, last_index = last_index, index
+
+		for i in range(index, last_index):
+			n = ring_light.wrap_index(i)
+			ring_light[n] = self.color		
 
 
 class RainbowMode(DeviceMode):
@@ -53,6 +71,9 @@ class RainbowMode(DeviceMode):
 
 		for p in range(self._particle_count):
 			self._particles.append(Particle(device.ring_light))
+
+		# Draw into separate buffer so we can blend with previous frame
+		self._draw_buffer = [(0, 0, 0)] * len(device.ring_light)			
 
 	def enter(self):
 		self._position = 0
@@ -103,9 +124,12 @@ class RainbowMode(DeviceMode):
 			hue = n * 256 / led_count;
 			c = colorwheel(hue)
 			c = color_scale(c, 160)
-			ring_light[i] = c
+			self._draw_buffer[i] = c
 
-		# Draw the particles over the rainbow
+		# Blend with previous frame
+		ring_light.blend(self._draw_buffer, 0.15)		
+
+		# Draw the particles over the rainbow, after the blend
 		for particle in self._particles:
 			if particle.is_active:
 				particle.update(elapsed_ms)

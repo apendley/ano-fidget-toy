@@ -105,8 +105,8 @@ class SpinMode(DeviceMode):
 		pointer_color = color_by_index(self._pointer_color_index, self.PALETTE_SIZE)
 
 		# To prevent gaps in the trail in case the framerate dips, track the last pointer index.
+		pointer_index = int(self._position)		
 		last_pointer_index = int(self._last_position)
-		pointer_index = int(self._position)
 
 		# Draw the pixel at the current pointer location
 		ring_light[ring_light.wrap_index(pointer_index)] = pointer_color

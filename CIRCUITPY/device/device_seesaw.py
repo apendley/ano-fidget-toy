@@ -29,7 +29,7 @@ class DeviceSeesaw(Device):
 		super().__init__(neopixel_pin, led_count)
 
 		# Boost the I2C clock frequency. Seems to buy us 1-2 ms on the Feather RP2040.
-		i2c = busio.I2C(board.SCL, board.SDA, frequency=1000000)
+		i2c = busio.I2C(board.SCL, board.SDA, frequency=1_000_000)
 		ss = seesaw.Seesaw(i2c, addr=0x49)
 		self._seesaw = ss
 
@@ -42,7 +42,7 @@ class DeviceSeesaw(Device):
 		ss.set_GPIO_interrupts(self.BUTTON_BITS << 1, True)
 
 		# Flush interrupt
-		_ = ss.get_GPIO_interrupt_flag()
+		ss.get_GPIO_interrupt_flag()
 
 	def _update_input(self):
 		interrupt_flags = self._seesaw.get_GPIO_interrupt_flag()

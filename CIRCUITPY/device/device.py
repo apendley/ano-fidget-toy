@@ -30,7 +30,7 @@ class Device:
 
 		self._button_long_press_duration = [self.DEFAULT_LONG_PRESS_DURATION] * self.BUTTON_COUNT
 		self._button_long_press_timer = [0] * self.BUTTON_COUNT
-		self._button_long_press_flag = [0] * self.BUTTON_COUNT
+		self._button_long_press_flag = [self.LONG_PRESS_INACTIVE] * self.BUTTON_COUNT
 
 	def set_long_press_duration(self, button_index, duration):
 		self._button_long_press_duration[button_index] = duration

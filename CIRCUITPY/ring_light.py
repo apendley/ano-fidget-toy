@@ -6,7 +6,6 @@ class RingLight:
 	def __init__(self, pin, led_count, brightness=1.0):
 		self._led_buffer = [(0, 0, 0)] * led_count		
 		self._leds = neopixel.NeoPixel(pin, led_count, brightness=brightness, auto_write=False)
-
 		self._animation = None
 
 		self.crossfade(0)
@@ -65,8 +64,8 @@ class RingLight:
 			self._snapshot = []
 
 			# Copy straight from the led object's pixel buffer
-			for i in range(len(self._leds)):
-				self._snapshot.append(self._leds[i])
+			for c in self._leds:
+				self._snapshot.append(c)
 		else:
 			self._snapshot = self._led_buffer.copy()
 

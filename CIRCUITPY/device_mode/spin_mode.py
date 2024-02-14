@@ -91,7 +91,6 @@ class SpinMode(DeviceMode):
 		# Apply velocity to the position
 		self._last_position = self._position
 		self._position += self._velocity * elapsed_ms / 1000
-		# self._position %= led_count
 
 		# Draw the background
 		bg_color = color_by_index(self._bg_color_index, self.PALETTE_SIZE, 80)

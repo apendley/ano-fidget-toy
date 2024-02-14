@@ -11,7 +11,7 @@ class StateFidget(MemoryGameState):
 
 		# We're gonna wait for all buttons to be up before
 		# we start processing any button input.
-		self._ignore_buttons = not self.device.all_buttons_up
+		self._ignore_buttons = self.device.any_button_down
 
 	def update(self, elapsed_ms):
 		device = self.device

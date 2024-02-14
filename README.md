@@ -1,7 +1,7 @@
 # ano-fidget-toy
 Firmware for a fidget toy using an ANO Rotary Encoder and NeoPixel LED ring
 
-# CircuitPython and bundle information:
+# CircuitPython and library bundle version information:
 CircuitPython 8.2.9 using libary package from 2024-02-09
 
 # Usage:
